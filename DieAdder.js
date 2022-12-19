@@ -176,7 +176,7 @@ function upgradeAbil() {
 
 var menu = new Dialog({
   title: "Die Adder",
-  content: "My dialog content",
+  content: "What do you want to add ?",
   buttons: {
     button1: {
       label: "Boost",
