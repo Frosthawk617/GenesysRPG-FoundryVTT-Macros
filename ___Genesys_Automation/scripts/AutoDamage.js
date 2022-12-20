@@ -16,10 +16,13 @@ Hooks.on("getRollBuilderFFGHeaderButtons", (event) => {
 });
 
 function getPierceVal(special) {
+  if (special.includes('Pierce')) { 
   var substr = /Pierce(\<\/\w+\>|) (\d)/g;
   var valReg = /\d/g;
   var pierceString = special.match(substr)[0];
-  var pierce = pierceString.match(valReg)[0];
+  var pierce = pierceString.match(valReg)[0]; } else {
+    pierce = 0;
+  }
   return pierce;
 }
 
