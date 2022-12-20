@@ -11,7 +11,7 @@
 	],
 	"styles": [],
 	"packs": [],
-	"minimumCoreVersion": 9,
+	"minimumCoreVersion": 7,
 	"compatibility": {
 		"minimum": 7,
 		"verified": 9,
