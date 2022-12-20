@@ -1,0 +1,20 @@
+{
+	"id": "gen_auto",
+	"name": "___Genesys_Automation",
+	"title": "Genesys_Automation",
+	"description": "Automates medicine checks and basic damage dealing.",
+	"version": "0.1.1",
+	"author": "Frosthawk",
+	"esmodules": [
+		"./scripts/AutoDamage.js",
+		"./scripts/heallazy.js"
+	],
+	"styles": [],
+	"packs": [],
+	"minimumCoreVersion": 9,
+	"compatibility": {
+		"minimum": 7,
+		"verified": 7,
+		"maximum": 10
+	}
+}
