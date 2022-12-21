@@ -1,5 +1,4 @@
 Hooks.on('getActorSheetHeaderButtons',(sheet, buttons)=>{
-    if (game.user.data.role === 4) {
     const target = (sheet.actor);
     buttons.unshift({
         class: 'gen-button',
@@ -9,7 +8,6 @@ Hooks.on('getActorSheetHeaderButtons',(sheet, buttons)=>{
             main(target);
         }
     });
-    }
 });
 async function main(target){
     const pack = game.packs.get("genesys-talent-compendiums.gcrb-talents");
@@ -850,10 +848,131 @@ async function main(target){
         }
       }]
     
+    const WepPacks = [
+        {
+            "name": "Small Beast or Creature",
+            "power_level": {
+              "combat": 0,
+              "social": 0,
+              "general": 0
+            },
+            "desc": "Creatures and wild animals attack with their claws, teeth, tusks, or hooves. We treat these attacks as equipment, and have provided a few options here. These profiles represent creatures that are human-sized or smaller.",
+            "equipment": {
+                "weapons": [
+                {
+                    "weapon": "Teeth and claws",
+                    "skill": "Brawl",
+                    "damage": 2,
+                    "critical": 3,
+                    "range": "engaged",
+                    "special": "Vicious 1"
+                },
+                {
+                    "weapon": "Hooves and tusks",
+                    "skill": "Brawl",
+                    "damage": 2,
+                    "critical": 4,
+                    "range": "engaged",
+                    "special": "Knockdown, Stun 2"   
+                }
+            ],
+            "armour": [],
+            "flavour": "None."
+        }
+        },
+          {
+            "name": "Large Beast or Creature",
+            "power_level": {
+              "combat": 1,
+              "social": 0,
+              "general": 0
+            },
+            "desc": "Large creatures, as with small ones, treat their attacks as equipment. These profiles represent creatures much larger than a human, such as an elephant or large dinosaur.",
+           "equipment": {
+            "weapons": [
+                {
+                    "weapon": "Gaping maw or razor claws",
+                    "skill": "Brawl",
+                    "damage": 4,
+                    "critical": 2,
+                    "range": "engaged",
+                    "special": "Vicious 3"
+                },
+                {
+                    "weapon": "Tentacles or thundering hooves",
+                    "skill": "Brawl",
+                    "damage": 5,
+                    "critical": 4,
+                    "range": "engaged",
+                    "special": "Knockdown, Concussive 1"   
+                }
+            ],
+            "armour":[],
+            "flavour": "None."
+        }
+          },
+          {
+            "name": "Manual Laborer",
+            "power_level": {
+              "combat": 0,
+              "social": 0,
+              "general": 0
+            },
+            "desc": "Manual laborers may be farmers, peasants, or others with access to pitchforks, shovels, sledgehammers, or other tools they can use as improvised weapons.",
+            "equipment":{
+            "weapons": [
+                {
+                    "weapon": "Large farming implement",
+                    "skill": "Melee [Heavy]",
+                    "damage": 3,
+                    "critical": 5,
+                    "range": "engaged",
+                    "special": "Cumbersome 3, Inferior"
+                }
+            ],
+            "armour":[
+                {
+                    "name": "Heavy clothers",
+                    "defense": {
+                        "soak": 1
+                    }
+                }
+            ],
+            "flavour": "Heavy clothes (+1 soak)."
+        }
+          },
+          {
+            "name": "Basic Citizen",
+            "power_level": {
+              "combat": 0,
+              "social": 0,
+              "general": 0
+            },
+            "desc": "In every setting, there are multitudes of average people simply living out their lives. This equipment package is for any character who has no reason to have weapons, armor, or specialized gear.",
+            "weapons": "Fists (Brawl; Damage +0; Critical 6; Range [Engaged]; Disorient 1, Knockdown).",
+            "equipment":{
+                "weapons": [
+                    {
+                        "weapon": "Fists",
+                        "skill": "Brawl",
+                        "damage": 0,
+                        "critical": 6,
+                        "range": "engaged",
+                        "special": "Disorient 1, Knockdown"
+                    }
+                ],
+                "armour":[],
+                "flavour": "Clothing appropriate to the specific era, average coin purse or wallet."
+            }     
+          }
+         
+    ]
+
     var page1Final = buildPage1();
     var page2Final = buildPage2();
     var page3Final = buildPage3();
     var page4Final = await buildPage4();
+    var page5Final = buildPage5();
     
     
     new Dialog({
@@ -886,7 +1005,9 @@ async function main(target){
                         for (var i =0; i < $(html).find(".talent:checkbox:checked").length; i++) {
                             talentIds.push($(html).find(".talent:checkbox:checked")[i].id);
                         }
-                        updateActor(selectedChar, selectedDefArray, selectedSkills,type, talentIds);
+                        nextDialogue("Weapon Packs", page5Final, (html)=>{
+                            updateActor(selectedChar, selectedDefArray, selectedSkills,type, talentIds);
+                        })
                     })
                 })
             })
@@ -1004,6 +1125,34 @@ async function main(target){
           var pageAdd = `<tr><td><input type="checkbox" name="" id="`+data.name+`" class="talent"></td><td>`+data.name+`</td><td>`+data.data.description+`</td></tr>`;
            i++;
          page = page + pageAdd;
+    }
+    var pageString = page.toString();
+    var pageFinal = `
+    <div>
+    <table>
+    <tr><td></td><td>Name</td><td>Skills</td></tr>
+    `+pageString+`
+    </table>
+        </div>
+    `;
+    return pageFinal;
+    }
+
+    function buildPage5() {
+        var page = '';
+        var i = 0;
+        for (var element of WepPacks) {
+            element.id = "select-"+i+"";
+         
+          var key = element.equipment.weapons;
+          var tempWep = '';
+          for (var j = 0; j < key.length; j++) {
+            var keyPos = ''+key[j].weapon+' ';
+            tempWep = tempWep + keyPos;
+          }
+            var pageAdd = `<tr><td><input type="checkbox" name="" id="select-`+i+`" class="wepcust"></td><td>`+element.name+`</td><td>`+tempWep+`</td></tr>`;
+           i++;
+            page = page + pageAdd;
     }
     var pageString = page.toString();
     var pageFinal = `

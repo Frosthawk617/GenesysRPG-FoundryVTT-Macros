@@ -8,11 +8,14 @@
 	"esmodules": [
 		"./scripts/AutoDamage.js",
 		"./scripts/heallazy.js",
-		"./scripts/NPC_Gen.js"
+		"./scripts/NPC_Gen.js",
+		"./scripts/booster.js",
+		"./scripts/boostToNext.js"
 	],
 	"styles": [],
 	"packs": [],
 	"minimumCoreVersion": 9,
+	"socket": "true",
 	"compatibility": {
 		"minimum": 7,
 		"verified": 7,
