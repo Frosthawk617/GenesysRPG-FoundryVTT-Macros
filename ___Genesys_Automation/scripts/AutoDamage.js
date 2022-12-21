@@ -28,8 +28,10 @@ function getPierceVal(special) {
 
 function getRollDetails(target, soak, wounds, pierce) {
   let dmg = Hooks.on("createChatMessage", (event) => {
+    console.log(event);
     var success = event.roll.ffg.success;
-    var wepDamage = event.roll.data.data.damage.value;
+    if (success > event.roll.ffg.failure) {
+    var wepDamage = event.roll.data.data.damage.adjusted;
     if (soak < pierce) {
       var pvS = 0;
     } else {
@@ -38,11 +40,23 @@ function getRollDetails(target, soak, wounds, pierce) {
     var toWound = success + wepDamage - pvS;
     var finalWounds = wounds + toWound;
     var message = "Dealt " + toWound + " Wounds to " + target.data.name;
-    ChatMessage.create({
-      content: message,
+
+
+    Dialog.confirm({
+      title: "Shoot the right guy ?",
+      content: "You aimed at "+target.data.name+"",
+      yes: () => {
+        ChatMessage.create({
+          content: message,
+        });
+        applyDamage(target, finalWounds);
+        Hooks.off("createChatMessage", dmg);
+      },
+      no: () => {ui.notifications.info("Pick the right target next time....")},
+      defaultYes: false
     });
-    applyDamage(target, finalWounds);
-    Hooks.off("createChatMessage", dmg);
+
+  } else {Hooks.off("createChatMessage", dmg);}
   });
 }
 

@@ -7,14 +7,15 @@
 	"author": "Frosthawk",
 	"esmodules": [
 		"./scripts/AutoDamage.js",
-		"./scripts/heallazy.js"
+		"./scripts/heallazy.js",
+		"./scripts/NPC_Gen.js"
 	],
 	"styles": [],
 	"packs": [],
-	"minimumCoreVersion": 7,
+	"minimumCoreVersion": 9,
 	"compatibility": {
 		"minimum": 7,
-		"verified": 9,
+		"verified": 7,
 		"maximum": 10
 	}
 }

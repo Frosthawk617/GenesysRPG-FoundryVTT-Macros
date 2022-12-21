@@ -1,0 +1,23 @@
+<div>
+<table>
+    <tr><td></td><td>Name</td><td>Characteristics</td><td>Examples</td></tr>
+    <tr><td><input type="radio" name="" id="smallCreature" class="chars"></td><td>Small Creature</td><td>Brawn: 1, Agility: 2, Intellect: 1, Cunning: 3, Willpower: 1, Presence: 1</td><td>Mouse, bird, snake, cat</td></tr>
+    <tr><td><input type="radio" name="" id="largeCreature" class="chars"></td><td>Large Creature</td><td>Brawn: 4, Agility: 2, Intellect: 1, Cunning: 2, Willpower: 1, Presence: 1</td><td>Bear, ox, horse, cow, ram</td></tr>
+    <tr><td><input type="radio" name="" id="stealthyCreature" class="chars"></td><td>Stealthy Creature</td><td>Brawn: 2, Agility: 3, Intellect: 1, Cunning: 3, Willpower: 1, Presence: 1</td><td>Puma, deer, shark</td></tr>
+    <tr><td><input type="radio" name="" id="hugeCreature" class="chars"></td><td>Huge Creature</td><td>Brawn: 5, Agility: 1, Intellect: 1, Cunning: 1, Willpower: 1, Presence: 1</td><td>Elephant, dinosaur</td></tr>
+    <tr><td><input type="radio" name="" id="averagePerson" class="chars"></td><td>Average Person</td><td>Brawn: 2, Agility: 2, Intellect: 2, Cunning: 2, Willpower: 2, Presence: 2</td><td>Any regular person</td></tr>
+    <tr><td><input type="radio" name="" id="toughPerson" class="chars"></td><td>Tough Person</td><td>Brawn: 3, Agility: 2, Intellect: 2, Cunning: 2, Willpower: 2, Presence: 1</td><td>Laborer, mob tough, soldier</td></tr>
+    <tr><td><input type="radio" name="" id="smartPerson" class="chars"></td><td>Smart Person</td><td>Brawn: 1, Agility: 2, Intellect: 3, Cunning: 2, Willpower: 2, Presence: 2</td><td>Student, medic, hacker</td></tr>
+    <tr><td><input type="radio" name="" id="sociablePerson" class="chars"></td><td>Sociable Person</td><td>Brawn: 2, Agility: 2, Intellect: 2, Cunning: 2, Willpower: 1, Presence: 3</td><td>Politician, manager</td></tr>
+    <tr><td><input type="radio" name="" id="jackofAllTrades" class="chars"></td><td>Jack of All Trades</td><td>Brawn: 3, Agility: 3, Intellect: 3, Cunning: 3, Willpower: 3, Presence: 3</td><td>Any competent person</td></tr>
+    <tr><td><input type="radio" name="" id="skilledWarrior" class="chars"></td><td>Skilled Warrior</td><td>Brawn: 4, Agility: 3, Intellect: 2, Cunning: 2, Willpower: 3, Presence: 1</td><td>Knight, berserker, veteran</td></tr>
+    <tr><td><input type="radio" name="" id="savant" class="chars"></td><td>Savant</td><td>Brawn: 2, Agility: 1, Intellect: 5, Cunning: 2, Willpower: 2, Presence: 1</td><td>Scholar, researcher, surgeon</td></tr>
+    <tr><td><input type="radio" name="" id="bornLeader" class="chars"></td><td>Born Leader</td><td>Brawn: 2, Agility: 2, Intellect: 2, Cunning: 3, Willpower: 3, Presence: 5</td><td>President, ruler, general</td></tr>
+    <tr><td><input type="radio" name="" id="cunningFoe" class="chars"></td><td>Cunning Foe</td><td>Brawn: 2, Agility: 4, Intellect: 2, Cunning: 4, Willpower: 2, Presence: 2</td><td>	Spy, assassin, military scout</td></tr>
+    <tr><td><input type="radio" name="" id="mastermind" class="chars"></td><td>Mastermind</td><td>Brawn: 3, Agility: 3, Intellect: 4, Cunning: 4, Willpower: 5, Presence: 3</td><td>The main villain in a story</td></tr>
+    <select id="type"><option value="minion">Minion</option><option value="rival">Rival</option><option value="Nemesis">Nemesis</option></select>
+</table>
+    </div>
+<a class="header-button gen"><i class='fas fa-tasks'></i>Gen-NPC</a>
+    <tr><td><input type="radio" name="" id="smallCreature" class="chars"></td><td>Small Creature</td><td>Brawn: 1, Agility: 2, Intellect: 1, Cunning: 3, Willpower: 1, Presence: 1</td><td>Mouse, bird, snake, cat</td></tr>
+    var pageAdd = `<tr><td><input type="radio" name="" id="`+element.name+`" class="chars"></td><td>`+element.name+`</td><td>`+element.name+`</td><td>`+element.ex+`</td></tr>`;
