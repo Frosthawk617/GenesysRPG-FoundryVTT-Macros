@@ -1,0 +1,240 @@
+[
+      {
+        "name": "smallCreature",
+        "characs": {
+          "brawn": 1,
+          "agility": 2,
+          "intellect": 1,
+          "cunning": 3,
+          "willpower": 1,
+          "presence": 1
+        },
+        "power_level": {
+          "combat": -1,
+          "social": -1,
+          "general": 0
+        },
+        "ex": "Mouse, bird, snake, cat"
+      },
+      {
+        "name": "largeCreature",
+        "characs": {
+          "brawn": 4,
+          "agility": 2,
+          "intellect": 1,
+          "cunning": 2,
+          "willpower": 1,
+          "presence": 1
+        },
+        "power_level": {
+          "combat": 1,
+          "social": -1,
+          "general": 0
+        },
+        "ex": "Bear, ox, horse, cow, ram"
+      },
+      {
+        "name": "stealthyCreature",
+        "characs": {
+          "brawn": 2,
+          "agility": 3,
+          "intellect": 1,
+          "cunning": 3,
+          "willpower": 1,
+          "presence": 1
+        },
+        "power_level": {
+          "combat": 0,
+          "social": -1,
+          "general": 0
+        },
+        "ex": "Puma, deer, shark"
+      },
+      {
+        "name": "hugeCreature",
+        "characs": {
+          "brawn": 5,
+          "agility": 1,
+          "intellect": 1,
+          "cunning": 1,
+          "willpower": 1,
+          "presence": 1
+        },
+        "power_level": {
+          "combat": 1,
+          "social": -1,
+          "general": -1
+        },
+        "ex": "Elephant, dinosaur"
+      },
+      {
+        "name": "averagePerson ",
+        "characs": {
+          "brawn": 2,
+          "agility": 2,
+          "intellect": 2,
+          "cunning": 2,
+          "willpower": 2,
+          "presence": 2
+        },
+        "power_level": {
+          "combat": 0,
+          "social": 0,
+          "general": 0
+        },
+        "ex": "Any regular person"
+      },
+      {
+        "name": "toughPerson",
+        "characs": {
+          "brawn": 3,
+          "agility": 2,
+          "intellect": 2,
+          "cunning": 2,
+          "willpower": 2,
+          "presence": 1
+        },
+        "power_level": {
+          "combat": 0,
+          "social": -1,
+          "general": 0
+        },
+        "ex": "Laborer, mob tough, soldier"
+      },
+      {
+        "name": "smartPerson",
+        "characs": {
+          "brawn": 1,
+          "agility": 2,
+          "intellect": 3,
+          "cunning": 2,
+          "willpower": 2,
+          "presence": 2
+        },
+        "power_level": {
+          "combat": -1,
+          "social": 0,
+          "general": 0
+        },
+        "ex": "Student, medic, hacker"
+      },
+      {
+        "name": "sociablePerson",
+        "characs": {
+          "brawn": 2,
+          "agility": 2,
+          "intellect": 2,
+          "cunning": 2,
+          "willpower": 1,
+          "presence": 3
+        },
+        "power_level": {
+          "combat": 0,
+          "social": 0,
+          "general": 0
+        },
+        "ex": "Politician, manager"
+      },
+      {
+        "name": "jackofAllTrades",
+        "characs": {
+          "brawn": 3,
+          "agility": 3,
+          "intellect": 3,
+          "cunning": 3,
+          "willpower": 3,
+          "presence": 3
+        },
+        "power_level": {
+          "combat": 1,
+          "social": 1,
+          "general": 1
+        },
+        "ex": "Any competent person"
+      },
+      {
+        "name": "skilledWarrior",
+        "characs": {
+          "brawn": 4,
+          "agility": 3,
+          "intellect": 2,
+          "cunning": 2,
+          "willpower": 3,
+          "presence": 1
+        },
+        "power_level": {
+          "combat": 2,
+          "social": 0,
+          "general": 0
+        },
+        "ex": "Knight, berserker, veteran"
+      },
+      {
+        "name": "savant",
+        "characs": {
+          "brawn": 2,
+          "agility": 1,
+          "intellect": 5,
+          "cunning": 2,
+          "willpower": 2,
+          "presence": 1
+        },
+        "power_level": {
+          "combat": -1,
+          "social": -1,
+          "general": 1
+        },
+        "ex": "Scholar, researcher, surgeon"
+      },
+      {
+        "name": "bornLeader",
+        "characs": {
+          "brawn": 2,
+          "agility": 2,
+          "intellect": 2,
+          "cunning": 3,
+          "willpower": 3,
+          "presence": 5
+        },
+        "power_level": {
+          "combat": 0,
+          "social": 2,
+          "general": 0
+        },
+        "ex": "President, ruler, general"
+      },
+      {
+        "name": "cunningFoe",
+        "characs": {
+          "brawn": 2,
+          "agility": 4,
+          "intellect": 2,
+          "cunning": 4,
+          "willpower": 2,
+          "presence": 2
+        },
+        "power_level": {
+          "combat": 1,
+          "social": 0,
+          "general": 1
+        },
+        "ex": "Spy, assassin, military scout"
+      },
+      {
+        "name": "mastermind",
+        "characs": {
+          "brawn": 3,
+          "agility": 3,
+          "intellect": 4,
+          "cunning": 4,
+          "willpower": 5,
+          "presence": 3
+        },
+        "power_level": {
+          "combat": 1,
+          "social": 2,
+          "general": 2
+        },
+        "ex": "The main villain in a story"
+      }
+    ]
