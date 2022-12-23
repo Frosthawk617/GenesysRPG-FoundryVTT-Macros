@@ -3,9 +3,19 @@ Hooks.on("getRollBuilderFFGHeaderButtons", (event) => {
   if(event.roll.item.hasOwnProperty('data')) {
   var special = event.roll.item.data.special.value;
   const target = game.user.targets.first().actor;
+  const adver = checkAdversary(target);
   const soak = target.data.data.stats.soak.value;
   const wounds = target.data.data.stats.wounds.value;
   var pierce = getPierceVal(special);
+  for (var i = 0; i < adver; i++){
+  if (event.dicePool.difficulty > 0) {
+    event.dicePool.difficulty -= 1;
+    event.dicePool.challenge += 1;
+  } else if (event.dicePool.difficulty === 0) {
+    event.dicePool.difficulty += 1;
+  } else {
+  }
+}
   var check = Hooks.on("ffgDiceMessage", () => {
     getRollDetails(target, soak, wounds, pierce);
   });
@@ -28,8 +38,10 @@ function getPierceVal(special) {
 
 function getRollDetails(target, soak, wounds, pierce) {
   let dmg = Hooks.on("createChatMessage", (event) => {
+    console.log(event);
     var success = event.roll.ffg.success;
-    var wepDamage = event.roll.data.data.damage.value;
+    if (success > event.roll.ffg.failure) {
+    var wepDamage = event.roll.data.data.damage.adjusted;
     if (soak < pierce) {
       var pvS = 0;
     } else {
@@ -38,14 +50,40 @@ function getRollDetails(target, soak, wounds, pierce) {
     var toWound = success + wepDamage - pvS;
     var finalWounds = wounds + toWound;
     var message = "Dealt " + toWound + " Wounds to " + target.data.name;
-    ChatMessage.create({
-      content: message,
+
+
+    Dialog.confirm({
+      title: "Shoot the right guy ?",
+      content: "You aimed at "+target.data.name+"",
+      yes: () => {
+        ChatMessage.create({
+          content: message,
+        });
+        applyDamage(target, finalWounds);
+        Hooks.off("createChatMessage", dmg);
+      },
+      no: () => {ui.notifications.info("Pick the right target next time....")},
+      defaultYes: false
     });
-    applyDamage(target, finalWounds);
-    Hooks.off("createChatMessage", dmg);
+
+  } else {Hooks.off("createChatMessage", dmg);}
   });
 }
 
 function applyDamage(target, finalWounds) {
   target.update({ "data.stats.wounds.value": finalWounds });
+}
+
+function checkAdversary(target) {
+  console.log(target.data.data.talentList);
+ if (target.data.data.talentList.find(e => e.name === 'Adversary')) {
+  return 1;
+ } else if (target.data.data.talentList.find(e => e.name === 'Adversary II')) {
+  return 2;
+ } else if (target.data.data.talentList.find(e => e.name === 'Adversary III')) {
+  return 3;
+ } else if (target.data.data.talentList.find(e => e.name === 'Adversary IIII')) {
+  return 4;
+ } else { return 0;}
+  
 }
