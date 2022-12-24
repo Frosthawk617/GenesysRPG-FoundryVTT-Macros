@@ -1,15 +1,3 @@
-Hooks.on('getActorSheetHeaderButtons',(sheet, buttons)=>{
-    if (game.user.isGM) {
-    buttons.unshift({
-        class: 'gen-button',
-        label: 'NextCheck',
-        icon: 'fas fa-swimmer',
-        onclick: () => {
-            NextTurn.boost(true);
-        }
-    });
-    }
-});
 
 Hooks.on("ready", () => {
     game.socket.on(`module.___Genesys_Automation`, request => {
@@ -42,9 +30,11 @@ class NextTurn {
     Hooks.off("updateCombat", combatCheck);
     let roller = (event)=>{
         if (facArray.includes(event.roll.data.token._id)) {
+            if (push) {
             ChatMessage.create({
                 content: "Boost die applied."
               });
+            }
           event.dicePool.boost += 1;
         }
     console.log(event);
