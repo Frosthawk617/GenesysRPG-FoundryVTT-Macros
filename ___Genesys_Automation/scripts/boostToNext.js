@@ -1,63 +1,69 @@
+Hooks.on('getActorSheetHeaderButtons',(sheet, buttons)=>{
+    if (game.user.isGM) {
+    buttons.unshift({
+        class: 'gen-button',
+        label: 'NextCheck',
+        icon: 'fas fa-swimmer',
+        onclick: () => {
+            NextTurn.boost(true);
+        }
+    });
+    }
+});
 
 Hooks.on("ready", () => {
     game.socket.on(`module.___Genesys_Automation`, request => {
-        if (request.action ==="boostStart"){
-        RoundBoost.boostStart();
-    }else if(request.action === "endEffectTurn"){
-      RoundBoost.endEffect();
-    } else {return}
-    });
-  });
-
-class RoundBoost {
-static boostStart(push=false) {
-    if (push){
-    game.socket.emit(`module.___Genesys_Automation`, {action: "boostStart"});
+      if (request.action === "addTurnBoost"){
+        NextTurn.boost();
+      } else if (request.action === "endTurnBoost"){
+        NextTurn.endEffect(request.data.roll);
+      }
+    })})
+class NextTurn {
+  static boost(push=false) {
+    if (push) {game.socket.emit(`module.___Genesys_Automation`, { action: "addTurnBoost"});}
+  const adderId = game.combat.current.tokenId;
+  const adderObj = game.combat.data.combatants.contents.find(x => x.data.tokenId === adderId);
+  const adderFac = adderObj.data.name;
+  var facArray = [];
+  for (let i = 0; i < game.combat.data.combatants.contents.length; i++) {
+    const element = game.combat.data.combatants.contents[i];
+    var factoAdd = element.data;
+    if (factoAdd.name === adderFac) {
+      facArray.push(factoAdd.tokenId)
     }
-    const setFaction = findCurretFaction();
-    let addBoostDie = (event) => {
-        var checkId = event.roll.data.token._id
-        var checkFaction = game.combat.data.combatants.contents.find(x => x.data.tokenId === checkId);
-        if (setFaction === checkFaction.data.name){
-        event.dicePool.boost += 1;
-    }
-
-    };
- 
-    
-    function findCurretFaction() {
-        var cID = game.combat.current.tokenId;
-        var combatants = game.combat.data.combatants.contents
-        var cObject = combatants.find(x => x.data.tokenId === cID)
-        var faction = cObject.data.name;
-        Hooks.once("updateCombat", (event) =>{addBoostToFaction(event, faction);});
-        return faction;
-    }
-    
-
-    var addBoostToFaction = (event, prevFaction) => {
-        var cID = event.current.tokenId;
-        var combatants = event.data.combatants.contents
-        var cObject = combatants.find(x => x.data.tokenId === cID)
-        var boostFaction = cObject.data.name;
-        if(prevFaction === boostFaction) {
-    Hooks.on("getRollBuilderFFGHeaderButtons", addBoostDie);
-    Hooks.on("ffgDiceMessage",(event) => {
-        if(push){
-            game.socket.emit(`module.___Genesys_Automation`, {action: "endEffectTurn"});}
-        console.log(event);
-        console.log(addBoostDie);
-            endEffect();
-        function endEffect(){
-            Hooks.off("getRollBuilderFFGHeaderButtons", addBoostDie);
+  }
+  console.log(facArray);
+  var combatCheck = Hooks.on("updateCombat",() =>{
+    const newId = game.combat.current.tokenId;
+  const newObj = game.combat.data.combatants.contents.find(x => x.data.tokenId === newId);
+  const newFac = newObj.data.name;
+  if (newFac === adderFac) {
+    Hooks.off("updateCombat", combatCheck);
+    let roller = (event)=>{
+        if (facArray.includes(event.roll.data.token._id)) {
+            ChatMessage.create({
+                content: "Boost die applied."
+              });
+          event.dicePool.boost += 1;
         }
-    })
-        } else {
-            Hooks.once("updateCombat", (event) =>{addBoostToFaction(event, prevFaction);});
-        }
+    console.log(event);
+      }
+    Hooks.on("getRollBuilderFFGHeaderButtons",roller);
+    var messageH= Hooks.on("createChatMessage", (event) => {
+            if (push) {
+                game.socket.emit(`module.___Genesys_Automation`, { action: "endTurnBoost",  data:{roller}})
+                }
+                NextTurn.endEffect(roller);
+Hooks.off("createChatMessage", messageH)
+        })
+    console.log("turned off");
+  }
+  })
+  console.log(adderFac);
     }
+    static endEffect(roll) {
+        Hooks.off("getRollBuilderFFGHeaderButtons",roll);
     }
-
-
 }
-window.RoundBoost = RoundBoost;
+window.NextTurn = NextTurn;

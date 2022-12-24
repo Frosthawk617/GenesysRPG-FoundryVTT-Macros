@@ -13,7 +13,15 @@
 		"./scripts/boostToNext.js"
 	],
 	"styles": [],
-	"packs": [],
+	"packs": [
+		{
+			"name": "genesys_automation",
+			"label": "GenesysAutomation",
+			"path": "packs/genesysautomation.db",
+			"entity": "Macro",
+			"module": "___Genesys_Automation"
+		  }
+	],
 	"minimumCoreVersion": 9,
 	"socket": "true",
 	"compatibility": {
