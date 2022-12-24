@@ -31,6 +31,9 @@ Hooks.on("ready", () => {
             case "boost":
                 boost(request.data.token, request.data.actor);
             break;
+            case "endEffect":
+                endEffect(request.data.ID, request.data.eventName);
+            break;
           }
   });
 });
@@ -45,17 +48,27 @@ if (push) {
     if (typeof actor._id === "undefined") {
       var targId = actor.data._id;
     } else {var targId = actor._id;}
-    var eventName = "BoostDie" + event.roll.data.actor.name;
     console.log(eventId, "   ", targId);
     if (event.roll.data.actor._id === targId) {
       event.dicePool.boost += 1;
-      Hooks.off("getRollBuilderFFGHeaderButtons", addBoostDie);
-      Sequencer.EffectManager.endEffects({ name: eventName });
     }
   };
   Hooks.on("getRollBuilderFFGHeaderButtons", addBoostDie);
+  const blah = Hooks.on("createChatMessage",(event)=>{
+    var speaker = event.data.speaker.actor;
+    console.log(speaker);
+    console.log(actor.data._id);
+    if (typeof actor.data._id === "undefined") {
+     var actCheck = actor._id; 
+    } else {var actCheck = actor.data._id}
+    if (speaker === actCheck) {
+      var eventName = "BoostDie" + event.data.speaker.alias;
+      endEffect(addBoostDie, eventName);
+      Hooks.off("createChatMessage", blah);
+      }
+    })
   var mess = "Just added a boost die to " + actor.name;
-
+if (push){
   var die = new Sequence()
   .effect()
   .file(
@@ -75,7 +88,7 @@ if (push) {
   .name("BoostDie" + token.actor.data.name)
   .persist()
   .play();
-
+}
 
   if (push) {
     ChatMessage.create({
@@ -100,13 +113,24 @@ function setback(token, actor, push=false) {
   console.log(eventId, '   ',targId);
   if (event.roll.data.actor._id === targId) {
   event.dicePool.setback += 1;
-  Hooks.off("getRollBuilderFFGHeaderButtons", addSetbackDie);
-  Sequencer.EffectManager.endEffects({name: eventName});
   }
 };
 Hooks.on("getRollBuilderFFGHeaderButtons", addSetbackDie);
+const blah = Hooks.on("createChatMessage",(event)=>{
+  var speaker = event.data.speaker.actor;
+  console.log(speaker);
+  console.log(actor.data._id);
+  if (typeof actor.data._id === "undefined") {
+   var actCheck = actor._id; 
+  } else {var actCheck = actor.data._id}
+  if (speaker === actCheck) {
+    var eventName = "SetbackDie" + event.data.speaker.alias;
+    endEffect(addSetbackDie, eventName);
+    
+    }
+  })
 var mess = "Just added a setback die to " + actor.name;
-
+if (push) {
 var die = new Sequence()
 .effect()
 .file("modules/jb2a_patreon/Library/Generic/Item/IounStone_01_Protection_Pink_200x200.webm")
@@ -119,7 +143,7 @@ var die = new Sequence()
 .name('SetbackDie'+ token.actor.data.name)
 .persist()
 .play();
-
+}
 
 if (push) {
   ChatMessage.create({
@@ -147,17 +171,27 @@ function upgradeDiff(token, actor, push=false) {
       } else {
       }
     }
-    Hooks.off("getRollBuilderFFGHeaderButtons", upgradeDiff);
-    Sequencer.EffectManager.endEffects({ name: eventName });
   };
 
   Hooks.on("getRollBuilderFFGHeaderButtons", upgradeDiff);
-
+  const blah = Hooks.on("createChatMessage",(event)=>{
+    var speaker = event.data.speaker.actor;
+    console.log(speaker);
+    console.log(actor.data._id);
+    if (typeof actor.data._id === "undefined") {
+     var actCheck = actor._id; 
+    } else {var actCheck = actor.data._id}
+    if (speaker === actCheck) {
+      var eventName = "UpgradeDiff" + event.data.speaker.alias;
+      endEffect(upgradeDiff, eventName);
+      Hooks.off("createChatMessage", blah);
+      }
+    })
   var mess =
     "Just upgraded the difficulty of " +
    actor.name +
     "'s next check";
-
+if (push){
     var die = new Sequence()
     .effect()
     .file(
@@ -177,6 +211,8 @@ function upgradeDiff(token, actor, push=false) {
     .name("UpgradeDiff" + token.actor.data.name)
     .persist()
     .play();
+}
+
 
     if (push) {
       ChatMessage.create({
@@ -205,14 +241,24 @@ function upgradeAbil(token, actor, push=false) {
       } else {
       }
     }
-    Hooks.off("getRollBuilderFFGHeaderButtons", upgradeAbil);
-    Sequencer.EffectManager.endEffects({ name: eventName });
   };
 
   Hooks.on("getRollBuilderFFGHeaderButtons", upgradeAbil);
-
+  const blah = Hooks.on("createChatMessage",(event)=>{
+    var speaker = event.data.speaker.actor;
+    console.log(speaker);
+    console.log(actor.data._id);
+    if (typeof actor.data._id === "undefined") {
+     var actCheck = actor._id; 
+    } else {var actCheck = actor.data._id}
+    if (speaker === actCheck) {
+      var eventName = "UpgradeAbil" + event.data.speaker.alias;
+      endEffect(upgradeAbil, eventName);
+      Hooks.off("createChatMessage", blah);
+      }
+    })
   var mess = "Just upgraded the ability of " + actor.name + "'s next check";
-
+if (push) {
   var die = new Sequence()
   .effect()
   .file(
@@ -232,7 +278,7 @@ function upgradeAbil(token, actor, push=false) {
   .name("UpgradeAbil" + token.actor.data.name)
   .persist()
   .play();
-
+}
 
 if (push) {
   ChatMessage.create({
@@ -281,3 +327,11 @@ var menu = new Dialog({
 }).render(true);
 
 }
+
+function endEffect(ID, eventName, push = false) {
+  if (push) {
+  game.socket.emit(`module.___Genesys_Automation`, { action: "endEffect", data: {ID, eventName} });
+  }
+  Sequencer.EffectManager.endEffects({name: eventName});
+  Hooks.off("getRollBuilderFFGHeaderButtons", ID);
+};

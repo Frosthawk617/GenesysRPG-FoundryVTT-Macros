@@ -1019,7 +1019,7 @@ async function main(target){
                       }
                         nextDialogue("Weapon Packs", page5Final, (html)=>{
                           var checkCust = $(html).find(".cust:checkbox:checked")[0];
-                          if (typeof checkCust === []) {
+                          if (typeof $(html).find(".wepcust:checkbox:checked")[0] != "undefined") {
                           var checkedID = $(html).find(".wepcust:checkbox:checked")[0].id;
                           var selectedWepPack = WepPacks.find(x=>x.id === checkedID);
                           console.log(checkedID);

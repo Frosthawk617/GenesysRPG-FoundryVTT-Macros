@@ -2,8 +2,9 @@
 Hooks.on("ready", () => {
     game.socket.on(`module.___Genesys_Automation`, request => {
         if (request.action ==="boostStart"){
-        console.log('Got it');
         RoundBoost.boostStart();
+    }else if(request.action === "endEffectTurn"){
+      RoundBoost.endEffect();
     } else {return}
     });
   });
@@ -17,16 +18,12 @@ static boostStart(push=false) {
     let addBoostDie = (event) => {
         var checkId = event.roll.data.token._id
         var checkFaction = game.combat.data.combatants.contents.find(x => x.data.tokenId === checkId);
-        console.log(checkFaction.data.name);
-        console.log(setFaction);
         if (setFaction === checkFaction.data.name){
-        console.log(event.roll.data.token._id);
         event.dicePool.boost += 1;
-        Hooks.once("ffgDiceMessage",() => {
-            Hooks.off("getRollBuilderFFGHeaderButtons", addBoostDie);
-        })
     }
+
     };
+ 
     
     function findCurretFaction() {
         var cID = game.combat.current.tokenId;
@@ -37,6 +34,7 @@ static boostStart(push=false) {
         return faction;
     }
     
+
     var addBoostToFaction = (event, prevFaction) => {
         var cID = event.current.tokenId;
         var combatants = event.data.combatants.contents
@@ -44,14 +42,22 @@ static boostStart(push=false) {
         var boostFaction = cObject.data.name;
         if(prevFaction === boostFaction) {
     Hooks.on("getRollBuilderFFGHeaderButtons", addBoostDie);
-            var mess = "Added boost die from spent advantage." ;
-            ChatMessage.create({
-                content: mess
-            })
+    Hooks.on("ffgDiceMessage",(event) => {
+        if(push){
+            game.socket.emit(`module.___Genesys_Automation`, {action: "endEffectTurn"});}
+        console.log(event);
+        console.log(addBoostDie);
+            endEffect();
+        function endEffect(){
+            Hooks.off("getRollBuilderFFGHeaderButtons", addBoostDie);
+        }
+    })
         } else {
             Hooks.once("updateCombat", (event) =>{addBoostToFaction(event, prevFaction);});
         }
     }
     }
+
+
 }
 window.RoundBoost = RoundBoost;
