@@ -1022,10 +1022,7 @@ async function main(target){
                           if (typeof $(html).find(".wepcust:checkbox:checked")[0] != "undefined") {
                           var checkedID = $(html).find(".wepcust:checkbox:checked")[0].id;
                           var selectedWepPack = WepPacks.find(x=>x.id === checkedID);
-                          console.log(checkedID);
-                          console.log(selectedWepPack);
                           } else {
-                            console.log(checkCust);
                             var custName = $(html).find("#wepName").val();
                             var custSkill = $(html).find("#skill").val();
                             var custDmg = $(html).find("#damage").val();
@@ -1064,7 +1061,6 @@ async function main(target){
                               "flavour": "Heavy clothes (+1 soak)."
                           }
                             }
-                            console.log(custName);
                           }
                           updateActor(selectedChar, selectedDefArray, selectedSkills,type, talentIds, selectedWepPack, custPackObj);
                     })
@@ -1074,6 +1070,10 @@ async function main(target){
     
           },
         },
+        button2:{
+          label: "Export",
+          callback: Move.startExport()
+        }
       },
       default: "button1"
     },myDialogOptions).render(true);
@@ -1317,7 +1317,6 @@ async function main(target){
     const id = pack.index.getName(talent)._id;
     const doc = await pack.getDocument(id);
     const data = game.items.fromCompendium(doc);
-  console.log(data);
     await target.createEmbeddedDocuments('Item', [data]);
 
 
@@ -1330,9 +1329,7 @@ async function main(target){
 /// Weps
 if (typeof selectedWepPack === "undefined"){
   var selectedWep = custPackObj.equipment.weapons;
-  console.log(selectedWep);
 } else {
-  console.log(selectedWepPack);
  var selectedWep = selectedWepPack.equipment.weapons;
 }
 for (let w = 0; w < selectedWep.length; w++) {
@@ -1348,7 +1345,7 @@ for (let w = 0; w < selectedWep.length; w++) {
     var skill = "Melee";
   } else if (element.skill ==="Melee [Light]") {
     var skill = "Melee";
-  }
+  }else {var skill = element}
   
 const wepData={
     name: element.weapon,
@@ -1386,7 +1383,6 @@ const wepData={
 
   
   await target.createEmbeddedDocuments('Item', [wepData])
-  console.log(wepData);
 }
 var mActor = target;
 const wait = async (ms) => new Promise((resolve)=> setTimeout(resolve, ms));
@@ -1442,4 +1438,55 @@ const armData={
       }
     }
 
-    
+    class Move{
+      
+      static startExport() {
+        var content = Move.buildPage1();
+          new Dialog({
+              title: "Export items to Item Directory",
+              content: content,
+              buttons: {
+                button1: {
+                  label: "Export",
+                  callback: (html)=>{
+                    if (typeof $(html).find(".item:checkbox:checked")[0] != "undefined") {
+                      var checkedIDArray = []; 
+                      for (var i =0; i < $(html).find(".item:checkbox:checked").length; i++) {
+                      checkedIDArray.push($(html).find(".item:checkbox:checked")[i].id);
+                      }
+                      var selectedItemArray =[];
+                      for (var selec of checkedIDArray) {
+                      const target = canvas.tokens.controlled[0].actor;
+                      const items = target.data.items.contents;
+                      var selectedItem = items.find(x=>x.name === selec);
+                      Item.create(selectedItem.data);
+                      }
+                    } else {console.log("No Items Selected");}}
+                }}
+          }).render(true);
+      }
+      
+          static buildPage1() {
+            const target = canvas.tokens.controlled[0].actor;
+            const items = target.data.items.contents;
+            var page = '';
+            var i = 0;
+            for (var element of items) {
+                element.data.id = "select-"+i+"";
+                var pageAdd = `<tr><td><input type="checkbox" name="" id="`+element.data.name+`" class="item"></td><td>`+element.data.name+`</td></tr>`;
+               i++;
+                page = page + pageAdd;
+        }
+        var pageString = page.toString();
+        var page1Final = `
+        <div>
+        <table>
+        <tr><td></td><td>Item</td></tr>
+        `+pageString+`
+        </table>
+            </div>
+        `;
+        return page1Final;
+        }
+      }
+      window.Move=Move;
